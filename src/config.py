@@ -1,1 +1,2 @@
 LOGS = False
+TRAIN_MODEL_MODE = False

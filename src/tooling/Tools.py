@@ -113,3 +113,44 @@ def print_valid_card_moves(name: str, cards_in_hand: list, valid_moves: list):
             print(c)
         print("************************************")
     return
+
+
+def compare_cards(card1: Card, card2: Card):
+    if card1.color == card2.color and card1.value == card2.value:
+        return True
+    return False
+
+
+def is_cer(card: Card):
+    if card.color == COLORS[0]:
+        return True
+    return False
+
+
+def is_lis(card: Card):
+    if card.color == COLORS[1]:
+        return True
+    return False
+
+
+def is_zal(card: Card):
+    if card.color == COLORS[2]:
+        return True
+    return False
+
+
+def is_kul(card: Card):
+    if card.color == COLORS[3]:
+        return True
+    return False
+
+
+def resolve_col(card: Card) -> str:
+    if is_kul(card):
+        return COLORS[3]
+    if is_zal(card):
+        return COLORS[2]
+    if is_lis(card):
+        return COLORS[1]
+    if is_cer(card):
+        return COLORS[0]
