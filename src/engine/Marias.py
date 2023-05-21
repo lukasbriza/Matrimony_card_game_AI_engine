@@ -16,7 +16,7 @@ class Marias:
     def __init__(
         self,
         player0: playerUnion = Player(0, 'Tunta'),
-        player1: playerUnion = AI_Player(1, 'Punta')
+        player1: playerUnion = AI_Player(1, 'Ja')
     ):
         # init cards
         cards: list[Card] = [Card(b, h) for b in COLORS for h in VALUES]
@@ -35,7 +35,7 @@ class Marias:
         self.trumfcolor: str = self.talon.cards[0].color
         self.lastcard: Card = self.talon.cards[0]
 
-        # posledni tah
+        # last move
         self.lastcard0: Card = None
         self.lastcard1: Card = None
         self.lasthlaska0: bool = False
@@ -104,7 +104,7 @@ class Marias:
             self.playerturn = 0
 
             if not self.talon.isempty():
-                # prvni dolizava hrac, ktery sebral stych
+                # fist take card who had stych
                 self.player0.addcard(self.talon.popcard())
                 self.player1.addcard(self.talon.popcard())
 

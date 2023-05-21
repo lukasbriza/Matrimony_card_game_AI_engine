@@ -3,6 +3,8 @@ import os
 import pygame
 from engine.Marias import Marias
 from config import *
+from strategies.zero_phase_strategy import valued_draw
+from strategies.zero_phase_strategy_train_field import trainStrategy
 
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -98,7 +100,7 @@ def draw_window(marias: Marias):
     pygame.display.update()
 
 
-# hlavni smycka hry
+# main game loop
 def main():
 
     marias = Marias()
@@ -128,4 +130,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if TRAIN_MODEL_MODE == False:
+        main()
+
+    # Train strategy
+    trainStrategy()

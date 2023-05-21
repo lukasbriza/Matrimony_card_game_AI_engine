@@ -67,7 +67,7 @@ class Hand:
         return l
 
     # return cards of val property
-    def getcardsval(self, val):
+    def getcardsval(self, val) -> list[Card]:
         l = []
         for c in self.cards:
             if c.value == val:
@@ -140,5 +140,5 @@ class Hand:
 
     # choose random card
     def chooserandom(self, cardlist: list[Card]):
-        #print(cardlist)
+        # print(cardlist)
         return random.choice(cardlist)
