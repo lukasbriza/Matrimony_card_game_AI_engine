@@ -18,6 +18,8 @@ def zero_phase_strategy(
 ):
     global card_to_play
     global possible_cards
+    possible_cards = None
+    card_to_play = None
 
     # Hardcoded rules
     #####################################################
@@ -40,7 +42,7 @@ def zero_phase_strategy(
             valid_moves, opCard, trumf_color)
 
     # play rule regardless of strategy
-    if card_to_play:
+    if card_to_play != None:
         for valid_move in valid_moves:
             if valid_move.color == card_to_play.color and valid_move.value == card_to_play.value:
                 return card_to_play
@@ -60,7 +62,7 @@ def zero_phase_strategy(
     if index == 0:
         possible_cards = common_strategy0(valid_moves, my_hand)
     if index == 1:
-        if possible_cards:
+        if possible_cards != None:
             possible_cards = common_strategy1(possible_cards, my_hand)
 
     # Attacking
@@ -68,24 +70,24 @@ def zero_phase_strategy(
         index2 = valued_draw(attack)
 
         if index2 == 0:
-            if possible_cards:
+            if possible_cards != None:
                 card_to_play = get_lowest_card(possible_cards)
             else:
                 card_to_play = get_lowest_card(valid_moves)
         if index2 == 1:
-            if possible_cards:
+            if possible_cards != None:
                 card_to_play = get_highest_card(possible_cards)
             else:
                 card_to_play = get_highest_card(valid_moves)
         if index2 == 2:
-            if possible_cards:
+            if possible_cards != None:
                 card_to_play = get_lowest_col_chance_of_oponent(
                     history, my_hand, opCard, possible_cards)
             else:
                 card_to_play = get_lowest_col_chance_of_oponent(
                     history, my_hand, opCard, valid_moves)
         if index2 == 3:
-            if possible_cards:
+            if possible_cards != None:
                 card_to_play = get_highest_col_chance_of_oponent(
                     history, my_hand, opCard, possible_cards)
             else:
@@ -93,7 +95,7 @@ def zero_phase_strategy(
                     history, my_hand, opCard, valid_moves)
 
         if index2 == 4:
-            if possible_cards:
+            if possible_cards != None:
                 card_to_play = combine_highest_card_and_op_lowest_chance(
                     possible_cards, history, my_hand, opCard)
             else:
@@ -199,15 +201,15 @@ def get_lowest_col_chance_of_oponent(history: History, my_hand: Hand, opCard: Ca
     ls = [[COLORS[0], cer_in_game], [COLORS[1], lis_in_game],
           [COLORS[2], zal_in_game], [COLORS[3], kul_in_game]]
 
-    def takeSecond(elem):
+    def takeSecond(elem: list):
         return elem[1]
 
-    sorted: list[list] = ls.sort(key=takeSecond)
+    ls.sort(key=takeSecond)
 
-    c0 = find_valid(sorted[0], valid_moves)
-    c1 = find_valid(sorted[1], valid_moves)
-    c2 = find_valid(sorted[2], valid_moves)
-    c3 = find_valid(sorted[3], valid_moves)
+    c0 = find_valid(ls[0], valid_moves)
+    c1 = find_valid(ls[1], valid_moves)
+    c2 = find_valid(ls[2], valid_moves)
+    c3 = find_valid(ls[3], valid_moves)
 
     if c0:
         return c0
@@ -225,15 +227,15 @@ def get_highest_col_chance_of_oponent(history: History, my_hand: Hand, opCard: C
     ls = [[COLORS[0], cer_in_game], [COLORS[1], lis_in_game],
           [COLORS[2], zal_in_game], [COLORS[3], kul_in_game]]
 
-    def takeSecond(elem):
+    def takeSecond(elem: list):
         return elem[1]
 
-    sorted: list[list] = ls.sort(key=takeSecond, reverse=True)
+    ls.sort(key=takeSecond, reverse=True)
 
-    c0 = find_valid(sorted[0], valid_moves)
-    c1 = find_valid(sorted[1], valid_moves)
-    c2 = find_valid(sorted[2], valid_moves)
-    c3 = find_valid(sorted[3], valid_moves)
+    c0 = find_valid(ls[0], valid_moves)
+    c1 = find_valid(ls[1], valid_moves)
+    c2 = find_valid(ls[2], valid_moves)
+    c3 = find_valid(ls[3], valid_moves)
 
     if c0:
         return c0
@@ -260,54 +262,58 @@ def combine_highest_card_and_op_lowest_chance(valid_moves: list[Card], history: 
     ls = [[COLORS[0], cer_in_game], [COLORS[1], lis_in_game],
           [COLORS[2], zal_in_game], [COLORS[3], kul_in_game]]
 
-    def takeSecond(elem):
+    def takeSecond(elem: list):
         return elem[1]
 
-    col_chances: list[list] = ls.sort(key=takeSecond)
+    ls.sort(key=takeSecond)
     play_card = None
 
     for move in valid_moves:
-        if col_chances[0] == move.color and play_card == None:
+        if ls[0] == move.color and play_card == None:
             play_card = move
-        if col_chances[0] == move.color and play_card != None and move.value < play_card.value:
+        if ls[0] == move.color and play_card != None and move.value < play_card.value:
             play_card = move
 
     if play_card == None:
         for move in valid_moves:
-            if col_chances[1] == move.color and play_card == None:
+            if ls[1] == move.color and play_card == None:
                 play_card = move
-            if col_chances[1] == move.color and play_card != None and move.value < play_card.value:
-                play_card = move
-
-    if play_card == None:
-        for move in valid_moves:
-            if col_chances[2] == move.color and play_card == None:
-                play_card = move
-            if col_chances[2] == move.color and play_card != None and move.value < play_card.value:
+            if ls[1] == move.color and play_card != None and move.value < play_card.value:
                 play_card = move
 
     if play_card == None:
         for move in valid_moves:
-            if col_chances[3] == move.color and play_card == None:
+            if ls[2] == move.color and play_card == None:
                 play_card = move
-            if col_chances[3] == move.color and play_card != None and move.value < play_card.value:
+            if ls[2] == move.color and play_card != None and move.value < play_card.value:
+                play_card = move
+
+    if play_card == None:
+        for move in valid_moves:
+            if ls[3] == move.color and play_card == None:
+                play_card = move
+            if ls[3] == move.color and play_card != None and move.value < play_card.value:
                 play_card = move
     return play_card
 
 
 def assign_chances(opCard: Card, history: History, my_hand: Hand):
+    known_cer = 0
+    known_lis = 0
+    known_zal = 0
+    known_kul = 0
+
     all_cards = get_all_cards_as_class()
     n_cer = len(list(filter(is_cer, all_cards)))
     n_lis = len(list(filter(is_lis, all_cards)))
     n_zal = len(list(filter(is_zal, all_cards)))
     n_kul = len(list(filter(is_kul, all_cards)))
 
-    known_cer = 0
-    known_lis = 0
-    known_zal = 0
-    known_kul = 0
-
     def resolve(col: str):
+        nonlocal known_cer
+        nonlocal known_lis
+        nonlocal known_zal
+        nonlocal known_kul
         if col == COLORS[0]:
             known_cer = known_cer + 1
         if col == COLORS[1]:
