@@ -64,6 +64,7 @@ class Marias:
 
         if self.talon.isempty():
             self.phase = 1
+
         print(self.phase)
         # player moves
         if self.playerturn == 0:

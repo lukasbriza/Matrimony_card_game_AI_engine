@@ -36,10 +36,10 @@ def zero_phase_strategy(
             card_to_play = Card(color, svrsek_val)
             break
 
-    # If play defence and I have "eso" in trumf color
-    if first == False and opCard != None:
-        card_to_play = if_eso_retrurn_trumf_eso(
-            valid_moves, opCard, trumf_color)
+    # play eso if you can
+    for move in valid_moves:
+        if move.value == "eso":
+            card_to_play = move
 
     # play rule regardless of strategy
     if card_to_play != None:
